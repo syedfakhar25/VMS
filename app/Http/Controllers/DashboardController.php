@@ -20,10 +20,20 @@ class DashboardController extends Controller
             $off_road = $off_road->count();
             $total_departments = Department::all();
             $total_departments = $total_departments->count();
+
+            //body_types
             $cars = Vehicle::where('body_type', 'CAR')->get();
             $jeeps = Vehicle::where('body_type', 'JEEP')->get();
             $bikes = Vehicle::where('body_type', 'MOTOR CYCLE')->get();
             $pickup = Vehicle::where('body_type', 'PICKUP')->get();
+            $tractor = Vehicle::where('body_type', 'TRACTOR')->get();
+            $bus = Vehicle::where('body_type', 'BUS')->get();
+            $mini_bus = Vehicle::where('body_type', 'MINI BUS')->get();
+
+            //year
+            $less_than_2000 = Vehicle::where('model' ,'<', '2000')->get();
+            $less_than_2010 = Vehicle::where('model' ,'>=', '2000')->where('model', '<', '2010' )->get();
+            $greater_than_2010 = Vehicle::where('model' ,'>=', '2010')->get();
             return view('admin.dashboard')->with([
                 'total_vehicles' => $total_vehicles,
                 'total_departments' => $total_departments,
@@ -33,6 +43,12 @@ class DashboardController extends Controller
                 'jeeps'=> $jeeps->count(),
                 'bikes'=> $bikes->count(),
                 'pickup'=> $pickup->count(),
+                'tractor'=> $tractor->count(),
+                'bus'=> $bus->count(),
+                'mini_bus'=> $mini_bus->count(),
+                'less_than_2000'=> $less_than_2000->count(),
+                'less_than_2010'=> $less_than_2010->count(),
+                'greater_than_2010'=> $greater_than_2010->count(),
             ]);
         }
         elseif ($user->user_type == 'department_admin'){

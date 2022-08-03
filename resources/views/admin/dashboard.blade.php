@@ -89,22 +89,30 @@
             </div>
         </div>
     </div>
+
+   {{-- vehicle body type graph--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <div class="row">
-        <div class="col-md-12" align="center">
+        <div class="col-md-6" align="center">
             <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+        <div class="col-md-6" align="center">
+            <canvas id="yearGraph" style="width:100%;max-width:600px"></canvas>
         </div>
     </div>
 
 
     <script>
-        var xValues = ["CARS", "JEEPS", "BIKES", "PICK UP"];
-        var yValues = [{{$cars}}, {{$jeeps}}, {{$bikes}}, {{$pickup}}];
+        var xValues = ["CAR", "JEEP", "BIKE", "PICK UP", "TRACTOR", "BUS", "MINI BUS"];
+        var yValues = [{{$cars}}, {{$jeeps}}, {{$bikes}}, {{$pickup}}, {{$tractor}},{{$bus}}, {{$mini_bus}}];
         var barColors = [
             "#ff3300",
             "#00cc00",
             "#0000cc",
-            "#ff00ff"
+            "#ff00ff",
+            "#ffcc00",
+            "#660033",
+            "#f00045"
         ];
 
         new Chart("myChart", {
@@ -124,5 +132,37 @@
             }
         });
     </script>
+
+
+    {{--vehicle yearly graph model wise--}}
+
+
+    <script>
+        var xValues = ['< 2000', '< 2010', '> 2010'];
+        var yValues = [{{$less_than_2000}},{{$less_than_2010}},{{$greater_than_2010}}];
+        var barColors = [
+            "red",
+            "blue",
+            "green",
+        ];
+
+        new Chart("yearGraph", {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Vehicle Models"
+                }
+            }
+        });
+    </script>
+
 
 @endsection
