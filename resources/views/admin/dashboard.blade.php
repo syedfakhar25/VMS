@@ -92,6 +92,7 @@
 
    {{-- vehicle body type graph--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <div class="row">
         <div class="col-md-6" align="center">
             <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
@@ -115,7 +116,7 @@
             "#f00045"
         ];
 
-        new Chart("myChart", {
+        var myChart= new Chart("myChart", {
             type: "doughnut",
             data: {
                 labels: xValues,
@@ -131,6 +132,18 @@
                 }
             }
         });
+
+        $("#myChart").click(
+            function(event){
+                var activepoints = myChart.getElementsAtEvent(event);
+                if(activepoints.length >0 ){
+                    window.location.href = "https://google.com"
+                }else {
+
+                }
+            }
+
+        )
     </script>
 
 
@@ -141,9 +154,9 @@
         var xValues = ['< 2000', '< 2010', '> 2010'];
         var yValues = [{{$less_than_2000}},{{$less_than_2010}},{{$greater_than_2010}}];
         var barColors = [
-            "red",
-            "blue",
-            "green",
+            "#ffd633",
+            "#66b3ff",
+            "#33ff33",
         ];
 
         new Chart("yearGraph", {

@@ -68,6 +68,7 @@
                         <th>Reg No.</th>
                         <th>Department</th>
                         <th>Body Type</th>
+                        <th>Allotee</th>
                         <th>Model</th>
                         <th>Engine No</th>
                         <th>Chassis No</th>
@@ -82,6 +83,7 @@
                             <td>{{$vehicle->reg_no}}</td>
                             <td>{{$vehicle->dep_name}}</td>
                             <td>{{$vehicle->body_type}}</td>
+                            <td>{{$vehicle->allotee}}</td>
                             <td>{{$vehicle->model}}</td>
                             <td>{{$vehicle->engine_no}}</td>
                             <td>{{$vehicle->chassis_no}}</td>
