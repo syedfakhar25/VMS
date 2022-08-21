@@ -6,6 +6,8 @@ use App\Models\Department;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Psr\Log\NullLogger;
 
 class DashboardController extends Controller
 {
@@ -14,8 +16,8 @@ class DashboardController extends Controller
         if($user->user_type == 'admin'){
             $vehicles = Vehicle::all();
             $total_vehicles = $vehicles->count();
-            $on_road = Vehicle::where('status', 'onroad')->get();
-            $off_road = Vehicle::where('status', 'offroad')->get();
+            $on_road = Vehicle::where('status', 'On road')->get();
+            $off_road = Vehicle::where('status', 'off road')->get();
             $on_road = $on_road->count();
             $off_road = $off_road->count();
             $total_departments = Department::all();
@@ -34,6 +36,18 @@ class DashboardController extends Controller
             $less_than_2000 = Vehicle::where('model' ,'<', '2000')->get();
             $less_than_2010 = Vehicle::where('model' ,'>=', '2000')->where('model', '<', '2010' )->get();
             $greater_than_2010 = Vehicle::where('model' ,'>=', '2010')->get();
+
+
+            //vehicles condition
+            $vehicles_condition=DB::table('vehicles')
+                ->select('status', DB::raw('count(*) as total'))
+                ->groupBy('status')
+                ->where('status', '!=', NULL)
+                ->where('status', '!=', 'Loss')
+                ->get();
+            //dd($vehicles_condition);
+
+
             return view('admin.dashboard')->with([
                 'total_vehicles' => $total_vehicles,
                 'total_departments' => $total_departments,
@@ -49,6 +63,7 @@ class DashboardController extends Controller
                 'less_than_2000'=> $less_than_2000->count(),
                 'less_than_2010'=> $less_than_2010->count(),
                 'greater_than_2010'=> $greater_than_2010->count(),
+                'vehicles_condition' => $vehicles_condition
             ]);
         }
         elseif ($user->user_type == 'department_admin'){

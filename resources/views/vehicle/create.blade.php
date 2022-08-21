@@ -103,6 +103,9 @@
                 <select class="form-control" name="status">
                     <option value="onroad">On-Road</option>
                     <option value="offroad">Off-Road</option>
+                    <option value="">Under Repair</option>
+                    <option value="">Garage</option>
+                    <option value="">Auction able</option>
                 </select>
             </div>
         </div>

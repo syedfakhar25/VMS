@@ -55,7 +55,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">On Road
+
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                <a href="{{route('vehicle.index')}}">On Road</a>
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -78,7 +80,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Off Road</div>
+                                <a href="{{route('vehicle.index')}}">Off Road</a></div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{$off_road}}</div>
                         </div>
                         <div class="col-auto">
@@ -101,6 +103,35 @@
             <canvas id="yearGraph" style="width:100%;max-width:600px"></canvas>
         </div>
     </div>
+
+
+    {{-- Bar chart--}}
+    <div class="row">
+
+        <hr width="100%">
+        <div class="col-md-12" align="center">
+            <b> <h6><em>Vehicles by their Condition</em></h6></b>
+        </div>
+    </div>
+    <div class="row" align="center">
+        <div class="col-md-1"></div>
+        @foreach($vehicles_condition as $i)
+            <div class="col-md-2">
+                <div class="card border-info mx-sm-1 p-3">
+                    <div class="text-info text-center mt-3"><h6>{{$i->status}}</h6></div>
+                    <div class="text-info text-center mt-2"><h1>{{$i->total}}</h1></div>
+                </div>
+            </div>
+        @endforeach
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" align="center">
+            <canvas id="barChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+    </div>
+
+
 
 
     <script>
@@ -137,7 +168,7 @@
             function(event){
                 var activepoints = myChart.getElementsAtEvent(event);
                 if(activepoints.length >0 ){
-                    window.location.href = "https://google.com"
+                    window.location.href = "{{route('vehicle.index')}}"
                 }else {
 
                 }
@@ -177,5 +208,33 @@
         });
     </script>
 
+    <script>
+        var xValues =  [
+                @foreach ($vehicles_condition as $i)
+            [ "{{ $i->status }}  " ,  ],
+            @endforeach
+        ];
+       // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+        var yValues = [@foreach($vehicles_condition as $i) "{{$i->total}}",@endforeach];
+        var barColors = ["red", "green","blue","orange","brown", "yellow", "grey"];
+
+        new Chart("barChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    display: true,
+                    //text: "Vehicles by their Condition"
+                }
+            }
+        });
+    </script>
 
 @endsection

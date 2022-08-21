@@ -70,8 +70,6 @@
                         <th>Body Type</th>
                         <th>Allotee</th>
                         <th>Model</th>
-                        <th>Engine No</th>
-                        <th>Chassis No</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -85,10 +83,8 @@
                             <td>{{$vehicle->body_type}}</td>
                             <td>{{$vehicle->allotee}}</td>
                             <td>{{$vehicle->model}}</td>
-                            <td>{{$vehicle->engine_no}}</td>
-                            <td>{{$vehicle->chassis_no}}</td>
                             <td colspan="2">
-                                {{--<a href="#"><i class="fas fa-eye" style="color: lightblue"></i></a>--}}
+                                <a href="{{route('vehicle.show', $vehicle->id)}}"><i class="fas fa-eye " style="color: blue"></i></a>
                                 <a href="{{route('vehicle.edit', $vehicle->id)}}"><i class="fas fa-edit" style="color: green"></i></a>
                             </td>
                         </tr>

@@ -115,7 +115,10 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-
+        $vehicle = Vehicle::find($id);
+        return view('vehicle.show' )->with([
+            'vehicle'=>$vehicle]
+        );
     }
 
     /**
