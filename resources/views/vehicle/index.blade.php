@@ -9,7 +9,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Vehicles
                 <a href="{{route('vehicle.create')}}" type="button" class="btn btn-success">
-                    &nbsp; <i class="fa fa-plus-circle"></i>&nbsp;Add
+                    &nbsp; <i class="fa fa-plus-esscircle"></i>&nbsp;Add
                 </a>
             </h6>
             <hr width="100%">
@@ -68,7 +68,8 @@
                         <th>Reg No.</th>
                         <th>Department</th>
                         <th>Body Type</th>
-                        <th>Allotee</th>
+                        <th>Status</th>
+                        <th>Engine Power</th>
                         <th>Model</th>
                         <th>Action</th>
                     </tr>
@@ -81,16 +82,18 @@
                             <td>{{$vehicle->reg_no}}</td>
                             <td>{{$vehicle->dep_name}}</td>
                             <td>{{$vehicle->body_type}}</td>
-                            <td>{{$vehicle->allotee}}</td>
+                            <td>{{$vehicle->status}}</td>
+                            <td>{{$vehicle->engine_power}} @if($vehicle->engine_power !=NULL)&nbsp; cc @endif</td>
                             <td>{{$vehicle->model}}</td>
                             <td colspan="2">
-                                <a href="{{route('vehicle.show', $vehicle->id)}}"><i class="fas fa-eye " style="color: blue"></i></a>
-                                <a href="{{route('vehicle.edit', $vehicle->id)}}"><i class="fas fa-edit" style="color: green"></i></a>
+                                <a href="{{route('vehicle.show', $vehicle->id)}}"><i class="fas fa-eye " style="color: darkturquoise"></i></a>
+                                <a href="{{route('vehicle.edit', $vehicle->id)}}"><i class="fas fa-edit" style="color: blue"></i></a>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                {{ $vehicles->withQueryString()->links() }}
             </div>
             {{--<div class="row">
                 <div class="col-md-12">{{ $vehicles->links() }}

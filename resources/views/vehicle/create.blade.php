@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="customFile">Department</label>
-                <select class="form-control" name="department_id">
+                <select class="form-control js-example-basic-single" name="department_id">
                     @if(Auth::user()->user_type == 'admin')
                         <option >--Choose--</option>
                         @foreach($departments as $dep)
@@ -100,13 +100,16 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="customFile">Status</label>
-                <select class="form-control" name="status">
-                    <option value="onroad">On-Road</option>
-                    <option value="offroad">Off-Road</option>
-                    <option value="">Under Repair</option>
-                    <option value="">Garage</option>
-                    <option value="">Auction able</option>
+                <select class="form-control " name="status">
+                    <option >--Choose--</option>
+                    @foreach($status_vehicles as $vs)
+                        <option value="{{$vs->status}}">{{$vs->status}}</option>
+                    @endforeach
                 </select>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="customFile">Remarks</label> <b style="color: red"><em>(Add reason why Auctionable or Off road)</em></b>
+                <textarea type="text" name="remarks" class="form-control" value="{{old('prev_reg_no')}}"></textarea>
             </div>
         </div>
         <div class="row">
@@ -120,4 +123,10 @@
     </form>
         </div>
     </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
 @endsection

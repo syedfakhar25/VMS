@@ -57,7 +57,7 @@ class DepartmentsController extends Controller
         $department->save();
 
         return redirect()->back()->with([
-           'sucess', 'Department Added Successfully'
+           'success', 'Department Added Successfully'
         ]);
 
     }
@@ -104,6 +104,14 @@ class DepartmentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Department::find($id);
+        $department->delete();
+        $user= User::find($department->user_id);
+        if($user!=NULL){
+            $user->delete();
+        }
+        return redirect()->back()->with([
+            'success', 'Department Deleted'
+        ]);
     }
 }

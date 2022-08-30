@@ -101,8 +101,10 @@
                     <div class="col-md-4">
                         <label class="form-label" for="customFile">Status</label>
                         <select class="form-control" name="status">
-                            <option value="onroad">On-Road</option>
-                            <option value="offroad">Off-Road</option>
+                            <option >--Choose--</option>
+                            @foreach($status_vehicles as $vs)
+                                <option value="{{$vs->status}}">{{$vs->status}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

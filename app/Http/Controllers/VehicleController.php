@@ -19,23 +19,61 @@ class VehicleController extends Controller
     public function index(Request $request)
     {
         $user= Auth::user();
+        $departments = array();
+        $vehicles = DB::table('vehicles');
+
         if($user->user_type == 'admin'){
-           if(isset($request->reg_no) || isset($request->department_id)|| isset($request->chassis_no) || isset($request->status)|| isset($request->body_type)){
-               $vehicles = DB::table('vehicles')
-                   ->join('departments', 'vehicles.department_id', '=', 'departments.id')
-                  ->where('vehicles.reg_no', $request->reg_no )
-                  ->orWhere('vehicles.chassis_no', $request->chassis_no )
-                  ->orWhere('vehicles.status', $request->status )
-                  ->orWhere('vehicles.body_type', $request->body_type )
-                   ->orWhere('departments.id', $request->department_id)
-                   ->get();
+           if(isset($request->reg_no) ){
+               $vehicles = $vehicles->where('vehicles.reg_no', $request->reg_no );
            }
-           else{
-               // $vehicles = Vehicle::with('department')->get();
-               $vehicles = DB::table('vehicles')
-                   /*->join('departments', 'vehicles.department_id', '=', 'departments.id')*/
-                   ->get();
+           elseif (isset($request->department_id)){
+                $vehicles = $vehicles->join('departments', 'vehicles.department_id', '=', 'departments.id')
+                    ->Where('departments.id', $request->department_id);
            }
+           elseif (isset($request->chassis_no)){
+                    $vehicles = $vehicles->where('vehicles.chassis_no', $request->chassis_no);
+           }
+           elseif (isset($request->status)){
+                    $vehicles = $vehicles->where('vehicles.status', $request->status);
+           }
+           elseif (isset($request->body_type)){
+                    $vehicles = $vehicles->where('vehicles.body_type', $request->body_type);
+           }
+
+            $departments = Department::all();
+
+        }
+
+        elseif ($user->user_type == 'department_admin'){
+            $department = Department::where('user_id' , $user->id)->first();
+            $vehicles = $vehicles->where('department_id', $department->id);
+
+        }
+        return view('vehicle.index')->with([
+            'vehicles' => $vehicles->paginate(25),
+            'count_vehicle' => $vehicles->count(),
+            'departments'=> $departments
+        ]);
+
+    }
+
+    public function searchVehicle($status){
+       // dd($status);
+        $user= Auth::user();
+        if($user->user_type == 'admin'){
+            if($status!=NULL){
+                $vehicles = DB::table('vehicles')
+                   // ->leftJoin('departments', 'vehicles.department_id', '=', 'departments.id')
+                    ->where('vehicles.status', $status )
+                    ->get();
+               // dd($vehicles);
+            }
+            else{
+                // $vehicles = Vehicle::with('department')->get();
+                $vehicles = DB::table('vehicles')
+                    /*->join('departments', 'vehicles.department_id', '=', 'departments.id')*/
+                    ->get();
+            }
 
             $departments = Department::all();
             return view('vehicle.index')->with([
@@ -44,15 +82,6 @@ class VehicleController extends Controller
                 'departments'=> $departments
             ]);
         }
-        elseif ($user->user_type == 'department_admin'){
-            $department = Department::where('user_id' , $user->id)->first();
-            $vehicles = Vehicle::where('department_id', $department->id)->get();
-            return view('vehicle.index')->with([
-                'vehicles' => $vehicles,
-                'count_vehicle' => $vehicles->count(),
-            ]);
-        }
-
     }
 
     /**
@@ -64,12 +93,19 @@ class VehicleController extends Controller
     {
         $departments = Department::all();
         $user= Auth::user();
+        $status_vehicles=DB::table('vehicles')
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->where('status', '!=', NULL)
+            ->where('status', '!=', 'Loss')
+            ->get();
         $user_department = Null;
         if($user->user_type == 'department_admin')
             $user_department = Department::where('user_id', $user->id)->first();
         return view('vehicle.create')->with([
             'departments' => $departments,
-            'user_department' =>$user_department
+            'user_department' =>$user_department,
+            'status_vehicles' => $status_vehicles
         ]);
     }
 
@@ -116,6 +152,7 @@ class VehicleController extends Controller
     public function show($id)
     {
         $vehicle = Vehicle::find($id);
+        //dd($vehicle);
         return view('vehicle.show' )->with([
             'vehicle'=>$vehicle]
         );
@@ -131,6 +168,12 @@ class VehicleController extends Controller
     {
         $vehicle = Vehicle::find($id);
         $departments = Department::all();
+        $status_vehicles=DB::table('vehicles')
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->where('status', '!=', NULL)
+            ->where('status', '!=', 'Loss')
+            ->get();
         $user= Auth::user();
         $user_department = Null;
         if($user->user_type == 'department_admin')
@@ -138,7 +181,8 @@ class VehicleController extends Controller
         return view('vehicle.edit')->with([
             'vehicle' => $vehicle,
             'departments' => $departments,
-            'user_department' =>$user_department
+            'user_department' =>$user_department,
+            'status_vehicles' => $status_vehicles
         ]);
     }
 

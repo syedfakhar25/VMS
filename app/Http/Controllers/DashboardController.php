@@ -48,6 +48,13 @@ class DashboardController extends Controller
             //dd($vehicles_condition);
 
 
+            //vehicle engine power
+            $engine_power_less_1300 = Vehicle::where('engine_power' ,'>=', '600')->where('engine_power', '<=','1300')->get();
+            $engine_power_less_1600 = Vehicle::where('engine_power' ,'>', '1300')->where('engine_power', '<=','1600')->get();
+            $engine_power_less_1800 = Vehicle::where('engine_power' ,'>', '1600')->where('engine_power', '<=','1800')->get();
+            $engine_power_less_3000 = Vehicle::where('engine_power' ,'>', '1800')->where('engine_power', '<=','3000')->get();
+            $engine_power_greater_3000 = Vehicle::where('engine_power' ,'>', '3000')->get();
+
             return view('admin.dashboard')->with([
                 'total_vehicles' => $total_vehicles,
                 'total_departments' => $total_departments,
@@ -63,7 +70,12 @@ class DashboardController extends Controller
                 'less_than_2000'=> $less_than_2000->count(),
                 'less_than_2010'=> $less_than_2010->count(),
                 'greater_than_2010'=> $greater_than_2010->count(),
-                'vehicles_condition' => $vehicles_condition
+                'vehicles_condition' => $vehicles_condition,
+                'engine_power_less_1300'=>$engine_power_less_1300->count(),
+                'engine_power_less_1600'=>$engine_power_less_1600->count(),
+                'engine_power_less_1800'=>$engine_power_less_1800->count(),
+                'engine_power_less_3000'=>$engine_power_less_3000->count(),
+                'engine_power_greater_3000'=>$engine_power_greater_3000->count(),
             ]);
         }
         elseif ($user->user_type == 'department_admin'){

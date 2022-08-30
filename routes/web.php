@@ -42,9 +42,11 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index']);
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     //vehicle crud
     Route::resource('vehicle', \App\Http\Controllers\VehicleController::class);
+    Route::get('/search_vehicles/{status}', [\App\Http\Controllers\VehicleController::class, 'searchVehicle'])->name('search_vehicles');
     //departments crud
     Route::resource('department', \App\Http\Controllers\DepartmentsController::class);
 });

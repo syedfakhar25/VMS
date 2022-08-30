@@ -6,11 +6,6 @@
 
 @section('content')
     <div class="card shadow mb-4">
-        @if (session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
                 Departments
@@ -68,6 +63,11 @@
             </div>
         </div>
         <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-primary" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="table-responsive">
                 <table class="table table-bordered" id="vehicleTable" width="100%" cellspacing="0">
                     <thead>
@@ -77,7 +77,7 @@
                         <th>Focal Person</th>
                         {{--<th>Email</th>--}}
                         <th>Phone #</th>
-                       {{-- <th>Details</th>--}}
+                       <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -89,7 +89,13 @@
                         <td>{{$dep->focal_person}}</td>
                         {{--<td>{{$dep->users()->id}}</td>--}}
                         <td>{{$dep->phone}}</td>
-                       {{-- <td>..</td>--}}
+                        <td>
+                            <form action="{{ route('department.destroy',['department' => $dep->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn"><i class="fas fa-trash" style="color: darkred"></i></button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                     </tbody>
